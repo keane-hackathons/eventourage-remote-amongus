@@ -1,22 +1,27 @@
-import { useState } from "react";
-import "./App.css";
+import React, { useEffect, useRef } from "react";
+import Phaser from 'phaser'
+import MyGame from './phaser/scene'
 
-import Button from "./Button";
+export default function App() {
+  const isFirstLoad = useRef(true);
 
-function App() {
-  const [count, setCount] = useState(0);
+  const config = {
+    type: Phaser.AUTO,
+    parent: "amongus",
+    width: 800,
+    height: 600,
+    scene: MyGame
+  };
 
-  return (
-    <div className="App">
-      <h1>Remote Application</h1>
-      <Button />
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-      </div>
-    </div>
-  );
+  useEffect(() => {
+    if (isFirstLoad.current === true) {
+      new Phaser.Game(config);
+    }
+
+    return () => {
+      isFirstLoad.current = false;
+    };
+  }, []);
+
+  return <div id="amongus" />;
 }
-
-export default App;
